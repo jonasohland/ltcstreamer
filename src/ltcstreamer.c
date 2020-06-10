@@ -48,7 +48,7 @@ int main(int argc, const char** argv)
     while (1) {
         ssize_t red = read(STDIN_FILENO, data, 256);
 
-        if (red == -1)
+        if (red < 1)
             break;
 
         ltc_decoder_write(decoder, data, red, total);
@@ -69,7 +69,7 @@ int main(int argc, const char** argv)
                        stime.secs,
                        (frame.ltc.dfbit) ? '.' : ':',
                        stime.frame);
-                
+
                 write(STDOUT_FILENO, outbf, strlen(outbf));
             }
         }
