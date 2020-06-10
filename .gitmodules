@@ -1,0 +1,3 @@
+[submodule "libs/libltc"]
+	path = libs/libltc
+	url = https://github.com/jonasohland/libltc-cmake
