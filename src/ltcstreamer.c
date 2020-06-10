@@ -14,7 +14,12 @@ int main(int argc, const char** argv)
     int fcount          = 0;
     long long int total = 0;
 
-    printf("hi");
+#ifdef _WIN32
+    // see https://msdn.microsoft.com/en-us/library/ktss1a9b.aspx and
+    // https://github.com/x42/libltc/issues/18
+    _set_fmode(_O_BINARY);
+    freopen(NULL, "r", stdin);
+#endif
 
 
     while (1) {
