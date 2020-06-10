@@ -1,17 +1,40 @@
 #include <errno.h>
 #include <ltc.h>
 #include <printf.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
+int usage(int retcode)
+{
+    puts("usage: ltcstreamer <framerate> <samplerate> <ltc_frame_div>");
+    return retcode;
+}
 
 int main(int argc, const char** argv)
 {
-    LTCDecoder* decoder = ltc_decoder_create(1920, 32);
+    if ((argc != 2) && (argc != 4))
+        return usage(1);
+
+    if (argc == 2) {
+        if (strcmp(*(argv + 1), "-h") || strcmp(*(argv + 1), "--help"))
+            return usage(0);
+        return usage(1);
+    }
+
+    double frate = atof(*(argv + 1));
+    long srate   = atol(*(argv + 2));
+    long fdiv    = atol(*(argv + 3));
+
+    if (fdiv < 1)
+        return 1;
+
+    LTCDecoder* decoder = ltc_decoder_create((srate / frate), 32);
     LTCFrameExt frame;
 
     unsigned char data[256];
 
-    int fcount          = 0;
+    long fcount         = 0;
     long long int total = 0;
 
 #ifdef _WIN32
@@ -20,7 +43,6 @@ int main(int argc, const char** argv)
     _set_fmode(_O_BINARY);
     freopen(NULL, "r", stdin);
 #endif
-
 
     while (1) {
         ssize_t red = read(STDIN_FILENO, data, 256);
@@ -34,7 +56,7 @@ int main(int argc, const char** argv)
 
             ++fcount;
 
-            if (fcount == 2) {
+            if (fcount == fdiv) {
                 fcount = 0;
 
                 SMPTETimecode stime;
@@ -52,4 +74,5 @@ int main(int argc, const char** argv)
     }
 
     ltc_decoder_free(decoder);
+    return errno;
 }

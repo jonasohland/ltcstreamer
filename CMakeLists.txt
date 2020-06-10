@@ -9,3 +9,5 @@ add_executable(ltcstreamer
 )
 
 target_link_libraries(ltcstreamer PRIVATE ltc)
+
+install(TARGETS ltcstreamer DESTINATION bin)
