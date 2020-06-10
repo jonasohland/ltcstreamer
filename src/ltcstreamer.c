@@ -33,7 +33,7 @@ int main(int argc, const char** argv)
     LTCFrameExt frame;
 
     unsigned char data[256];
-    char outbf[24];
+    char outbf[13];
 
     long fcount         = 0;
     long long int total = 0;
@@ -63,7 +63,7 @@ int main(int argc, const char** argv)
                 SMPTETimecode stime;
                 ltc_frame_to_time(&stime, &frame.ltc, 1);
 
-                snprintf(outbf, 24, "%02d:%02d:%02d%c%02d\n",
+                snprintf(outbf, 13, "%02d:%02d:%02d%c%02d\n",
                        stime.hours,
                        stime.mins,
                        stime.secs,
