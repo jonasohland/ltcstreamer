@@ -1,9 +1,24 @@
 #include <errno.h>
 #include <ltc.h>
-#include <printf.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
+
+
+#if _WIN32
+#include <fcntl.h>
+#include <io.h>
+#define STDIN_FILENO 0
+#define STDOUT_FILENO 1
+#define STDERR_FILENO 2
+#define read _read
+#define write _write
+#ifdef _WIN64
+#define ssize_t __int64
+#else
+#define ssize_t long
+#endif
+#endif
 
 int usage(int retcode)
 {
