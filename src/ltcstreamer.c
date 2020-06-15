@@ -18,6 +18,8 @@
 #else
 #define ssize_t long
 #endif
+#else
+#include <unistd.h>
 #endif
 
 int usage(int retcode)
