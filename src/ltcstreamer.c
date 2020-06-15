@@ -6,20 +6,20 @@
 
 
 #if _WIN32
-#include <fcntl.h>
-#include <io.h>
-#define STDIN_FILENO 0
-#define STDOUT_FILENO 1
-#define STDERR_FILENO 2
-#define read _read
-#define write _write
-#ifdef _WIN64
-#define ssize_t __int64
+#    include <fcntl.h>
+#    include <io.h>
+#    define STDIN_FILENO  0
+#    define STDOUT_FILENO 1
+#    define STDERR_FILENO 2
+#    define read          _read
+#    define write         _write
+#    ifdef _WIN64
+#        define ssize_t __int64
+#    else
+#        define ssize_t long
+#    endif
 #else
-#define ssize_t long
-#endif
-#else
-#include <unistd.h>
+#    include <unistd.h>
 #endif
 
 int usage(int retcode)
@@ -80,12 +80,9 @@ int main(int argc, const char** argv)
                 SMPTETimecode stime;
                 ltc_frame_to_time(&stime, &frame.ltc, 1);
 
-                snprintf(outbf, 13, "%02d:%02d:%02d%c%02d\n",
-                       stime.hours,
-                       stime.mins,
-                       stime.secs,
-                       (frame.ltc.dfbit) ? '.' : ':',
-                       stime.frame);
+                snprintf(outbf, 13, "%02d:%02d:%02d%c%02d\n", stime.hours,
+                         stime.mins, stime.secs, (frame.ltc.dfbit) ? '.' : ':',
+                         stime.frame);
 
                 write(STDOUT_FILENO, outbf, strlen(outbf));
             }
